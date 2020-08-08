@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     maxWidth: 140,
     marginTop: 40,
-  }
+  },
 });
 
 export default styles;
