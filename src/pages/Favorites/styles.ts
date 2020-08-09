@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
   },
 
   favorites: {
-    marginTop: -50,
+    marginTop: -40,
   },
 });
 
