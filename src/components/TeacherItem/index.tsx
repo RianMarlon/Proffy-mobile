@@ -24,7 +24,7 @@ function TeacherItem() {
       </View>
 
       <Text style={styles.biography}>
-        Entuasiasta nas melhores técnicas de cálculos matemáticos do mundo.
+        Entuasiasta das melhores técnicas de cálculos matemáticos do mundo.
         {'\n'}{'\n'}
         Considerado um dos melhores professores de Matemática do mundo. Reconhecido por vários cientistas como o Leonard Euler II.
       </Text>
@@ -43,7 +43,7 @@ function TeacherItem() {
 
           <RectButton style={styles.contactButton}>
             <Image source={whatsappIcon} />
-            <Text style={styles.contactButtonText}>Entar em contato</Text>
+            <Text style={styles.contactButtonText}>Entrar em contato</Text>
           </RectButton>
         </View>
       </View>

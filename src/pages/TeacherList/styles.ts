@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   },
 
   searchForm: {
-    marginBottom: 8,
+    marginBottom: 24,
   },
 
   label: {
@@ -33,6 +33,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginTop: 4,
     marginBottom: 16
+  },
+
+  submitSearchButton: {
+    backgroundColor: '#04D361',
+    height: 56,
+    borderRadius: 8,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  submitSearchButtonText: {
+    color: '#FFF',
+    fontFamily: 'Archivo_700Bold',
+    fontSize: 16,
   },
 
   teacherList: {
