@@ -8,31 +8,41 @@ import whatsappIcon from '../../assets/images/icons/whatsapp.png';
 
 import styles from './styles';
 
-function TeacherItem() {
+export interface Teacher {
+  id: number,
+  avatar: string,
+  name: string,
+  subject: string,
+  biography: string,
+  cost: number,
+  whatsapp: string,
+}
+
+interface TeacherItemProps {
+  teacher: Teacher
+}
+
+const TeacherItem:React.FC<TeacherItemProps> = ({ teacher }) => {
   return (
     <View style={styles.container}>
       <View style={styles.profile}>
         <Image 
-          source={{ uri: 'https://github.com/RianMarlon.png' }}
+          source={{ uri: teacher.avatar }}
           style={styles.avatar}
         />
 
         <View style={styles.profileInfo}>
-          <Text style={styles.name}>Rian Marlon</Text>
-          <Text style={styles.subject}>Matemática</Text>
+          <Text style={styles.name}>{teacher.name}</Text>
+          <Text style={styles.subject}>{teacher.subject}</Text>
         </View>
       </View>
 
-      <Text style={styles.biography}>
-        Entuasiasta das melhores técnicas de cálculos matemáticos do mundo.
-        {'\n'}{'\n'}
-        Considerado um dos melhores professores de Matemática do mundo. Reconhecido por vários cientistas como o Leonard Euler II.
-      </Text>
+      <Text style={styles.biography}>{teacher.biography}</Text>
 
       <View style={styles.footer}>
         <Text style={styles.price}>
           Preço/hora {'   '} 
-          <Text style={styles.priceValue}>R$300,00</Text>
+          <Text style={styles.priceValue}>R${teacher.cost}</Text>
         </Text>
 
         <View style={styles.buttonsContainer}>
