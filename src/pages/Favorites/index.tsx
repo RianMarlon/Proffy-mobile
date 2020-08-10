@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, ScrollView, AsyncStorage } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native'
 
@@ -20,9 +20,11 @@ function Favorites() {
       });
   }
 
-  useFocusEffect(() => {
-    loadFavorites();
-  });
+  useFocusEffect(
+    React.useCallback(() => {
+      loadFavorites();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
