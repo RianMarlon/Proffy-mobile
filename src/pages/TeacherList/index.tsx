@@ -53,6 +53,7 @@ function TeacherList() {
 
     const response = await api.get('/classes', { params });
 
+    setIsFiltersVisible(false);
     setTeachers(response.data);
   }
 
