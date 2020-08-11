@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Text } from 'react-native';
 import { TextInput, BorderlessButton, RectButton } from 'react-native-gesture-handler';
 import { Feather } from '@expo/vector-icons';
@@ -33,6 +33,20 @@ function TeacherList() {
         }
       });
   }
+
+  useEffect(() => {
+    const paramsInitial = {
+      subject: '',
+      week_day: '',
+      time: ''
+    }
+
+    api.get('/classes', { params: paramsInitial })
+      .then((response) => {  
+        setIsFiltersVisible(false);
+        setTeachers(response.data);
+      });
+  }, []);
 
   useFocusEffect(
     React.useCallback(() => {
