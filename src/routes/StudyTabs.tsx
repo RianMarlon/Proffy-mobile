@@ -33,6 +33,7 @@ function StudyTabs() {
         },
         inactiveBackgroundColor: '#FAFAFC',
         activeBackgroundColor: '#EBEBF5',
+        inactiveTintColor: '#C1BCCC',
         activeTintColor: '#8257E5',
       }}  
     >
