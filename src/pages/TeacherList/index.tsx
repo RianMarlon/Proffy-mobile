@@ -132,7 +132,12 @@ function TeacherList() {
                 <TextInput
                   style={styles.input}
                   value={time}
-                  onChangeText={(text) => setTime(text)}
+                  maxLength={5}
+                  keyboardType='numeric'
+                  onChangeText={(text) => {
+                    if (text.length === 2) setTime(text + ':');
+                    else setTime(text);
+                  }}
                   placeholder="Qual o horário?"
                   placeholderTextColor="#C1BCCC"
                 />
