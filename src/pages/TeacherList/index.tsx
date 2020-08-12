@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Text } from 'react-native';
+import { View, ScrollView, Text, Picker } from 'react-native';
 import { TextInput, BorderlessButton, RectButton } from 'react-native-gesture-handler';
 import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -11,6 +11,7 @@ import api from '../../services/api';
 
 import styles from './styles';
 import { useFocusEffect } from '@react-navigation/native';
+import SelectPicker from '../../components/SelectPicker';
 
 function TeacherList() {
   const [teachers, setTeachers] = useState([]);
@@ -87,25 +88,46 @@ function TeacherList() {
       >
         { isFiltersVisible && (
           <View style={styles.searchForm}>
-            <Text style={styles.label}>Matéria</Text>
-            <TextInput 
-              style={styles.input}
-              onChangeText={(text) => setSubject(text)}
-              value={subject}
-              placeholder="Qual a matéria?"
-              placeholderTextColor="#C1BCCC"
+            <SelectPicker 
+              label="Matéria"
+              selectedValue={subject}
+              onValueChange={(itemValue) => setSubject(itemValue)}
+              items={[
+                { value: 'Biologia', label: 'Biologia' },
+                { value: 'Matemática', label: 'Matemática' },
+                { value: 'Física', label: 'Física' },
+                { value: 'Química', label: 'Quimíca' },
+                { value: 'Português', label: 'Português' },
+                { value: 'Redação', label: 'Redação' },
+                { value: 'História', label: 'História' },
+                { value: 'Filosofia', label: 'Filosofia' },
+                { value: 'Geografia', label: 'Geografia' },
+                { value: 'Sociologia', label: 'Sociologia' },
+                { value: 'Inglês', label: 'Inglês' },
+                { value: 'Espanhol', label: 'Espanhol' },
+                { value: 'Educação Física', label: 'Educação Física' },
+                { value: 'Artes', label: 'Artes' }
+              ]}
+              sort
             />
 
             <View style={styles.inputGroup}>
               <View style={styles.inputBlock}>
-                <Text style={styles.label}>Dia da semana</Text>
-                <TextInput
-                  style={styles.input}
-                  value={week_day}
-                  onChangeText={(text) => setWeekDay(text)}
-                  placeholder="Qual o dia?"
-                  placeholderTextColor="#C1BCCC"
-                />
+              <SelectPicker 
+                label="Dia da semana"
+                selectedValue={week_day}
+                onValueChange={(itemValue) => setWeekDay(itemValue)}
+                items={[
+                  { value: '0', label: 'Domingo' },
+                  { value: '1', label: 'Segunda-feira' },
+                  { value: '2', label: 'Terça-feira' },
+                  { value: '3', label: 'Quarta-feira' },
+                  { value: '4', label: 'Quinta-feira' },
+                  { value: '5', label: 'Sexta-feira' },
+                  { value: '6', label: 'Sábado' }
+                ]}
+                sort
+              />
               </View>
 
               <View style={styles.inputBlock}>
