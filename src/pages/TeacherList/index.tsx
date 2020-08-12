@@ -35,22 +35,19 @@ function TeacherList() {
       });
   }
 
-  useEffect(() => {
-    const paramsInitial = {
-      subject: '',
-      week_day: '',
-      time: ''
-    }
-
-    api.get('/classes', { params: paramsInitial })
-      .then((response) => {  
-        setIsFiltersVisible(false);
-        setTeachers(response.data);
-      });
-  }, []);
-
   useFocusEffect(
     React.useCallback(() => {
+      const paramsInitial = {
+        subject: '',
+        week_day: '',
+        time: ''
+      }
+  
+      api.get('/classes', { params: paramsInitial })
+        .then((response) => {  
+          setIsFiltersVisible(false);
+          setTeachers(response.data);
+        });
       loadFavorites();
     }, [])
   );
