@@ -135,8 +135,32 @@ function TeacherList() {
                   maxLength={5}
                   keyboardType='numeric'
                   onChangeText={(text) => {
-                    if (text.length === 2) setTime(text + ':');
-                    else setTime(text);
+                    if (!text.includes(':')) {
+                      if (text.length === 2) {
+                        text = text + ':';
+                      }
+
+                      else if (text.length === 5) {
+                        text = text.slice(0, 2) + ':' + text.slice(3, 5);
+                      }
+                    }
+
+                    else {
+                      if (text.length === 5) {
+                        const array = text.split(':').map((value) => parseInt(value));
+
+                        if (isNaN(array[0]) || isNaN(array[1])) {
+                          text = '00:00';
+                        }
+                        
+                        else if ((array[0] > 23 || array[0] < 0)
+                          || (array[1] > 59 || array[1] < 0)) {
+                            text = '00:00';
+                        }
+                      }
+                    }
+                    
+                    setTime(text);
                   }}
                   placeholder="Qual o horário?"
                   placeholderTextColor="#C1BCCC"
