@@ -8,10 +8,10 @@ import { RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 
 function GiveClasses() {
-  const { goBack } = useNavigation();
+  const { navigate } = useNavigation();
 
   function handleNavigateBack() {
-    goBack();
+    navigate('Landing');
   }
 
   return (
