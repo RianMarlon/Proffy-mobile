@@ -49,6 +49,7 @@ function TeacherList() {
   return (
     <View style={styles.container}>
       <PageHeader 
+        namePage="Estudar"
         title="Proffys disponíveis"
         headerRight={(
           <BorderlessButton 
