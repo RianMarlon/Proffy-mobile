@@ -51,14 +51,22 @@ function TeacherList() {
       <PageHeader 
         namePage="Estudar"
         title="Proffys disponíveis"
-        headerRight={(
+      >
+        <View style={styles.buttonFiltersGroup}>
           <BorderlessButton 
             onPress={handleToggleFiltersVisible}
+            style={styles.buttonFilters}
           >
-            <Feather name="filter" size={20} color="#FFF" />
+            <Feather name="filter" size={20} color="#04D361" />
+            <Text style={styles.buttonText}>Filtrar por dia, matéria e hora</Text>
+            <Feather 
+              name={isFiltersVisible ? 'chevron-up' : 'chevron-down'} 
+              size={20} 
+              color="#A380F6"
+            />
           </BorderlessButton>
-        )}
-      >
+        </View>
+
         { isFiltersVisible && (
           <View style={styles.searchForm}>
             <SelectPicker 
