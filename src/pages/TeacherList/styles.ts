@@ -6,6 +6,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0F0F7',
   },
 
+  buttonFiltersGroup: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#9871F5',
+    marginTop: -20,
+    marginBottom: 30,
+  },
+
+  buttonFilters: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+
+  buttonText: {
+    fontSize: 16,
+    color: '#D4C2FF',
+  },
+
   searchForm: {
     marginBottom: 24,
   },
