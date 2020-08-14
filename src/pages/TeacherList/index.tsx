@@ -1,74 +1,49 @@
-import React, { useState } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
+import React, { useState, useContext, useEffect } from 'react';
 import { View, ScrollView, Text } from 'react-native';
 import { TextInput, BorderlessButton, RectButton } from 'react-native-gesture-handler';
 import { Feather } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-community/async-storage';
 
 import PageHeader from '../../components/PageHeader';
-import TeacherItem, { Teacher } from '../../components/TeacherItem';
+import TeacherItem from '../../components/TeacherItem';
 import SelectPicker from '../../components/SelectPicker';
-
-import api from '../../services/api';
+import TeachersContext, { Teacher } from '../../contexts/TeachersContext';
 
 import styles from './styles';
 
 function TeacherList() {
-  const [teachers, setTeachers] = useState([]);
-  const [favorites, setFavorites] = useState<number[]>([]);
+  const { teachers, getTeachers } = useContext(TeachersContext);
   const [isFiltersVisible, setIsFiltersVisible] = useState(false);
 
   const [subject, setSubject] = useState('');
   const [week_day, setWeekDay] = useState('');
   const [time, setTime] = useState('');
 
-  function loadFavorites() {
-    AsyncStorage.getItem('favorites')
-      .then(response => {
-        if (response) {
-          const favoritedTeachers = JSON.parse(response);
-          const favoritedTeachersId = favoritedTeachers.map((teacher: Teacher) => {
-            return teacher.id;
-          });
-          setFavorites(favoritedTeachersId);
-        }
-      });
-  }
+  useEffect(() => {
+    const params = {
+      subject: '',
+      week_day: '',
+      time: '',
+    }
 
-  useFocusEffect(
-    React.useCallback(() => {
-      const paramsInitial = {
-        subject: '',
-        week_day: '',
-        time: ''
-      }
-  
-      api.get('/classes', { params: paramsInitial })
-        .then((response) => {  
-          setIsFiltersVisible(false);
-          setTeachers(response.data);
-        });
-      loadFavorites();
-    }, [])
-  );
+    getTeachers(params).then(() => {
+      setIsFiltersVisible(false);
+    });
+  }, []);
 
   function handleToggleFiltersVisible() {
     setIsFiltersVisible(!isFiltersVisible);
   }
 
-  async function handleFiltersSubmit() {
-    loadFavorites();
-
+  function handleFiltersSubmit() {
     const params = {
       subject,
       week_day,
       time
     }
-
-    const response = await api.get('/classes', { params });
-
-    setIsFiltersVisible(false);
-    setTeachers(response.data);
+    
+    getTeachers(params).then(() => {
+      setIsFiltersVisible(false);
+    });
   }
 
   return (
@@ -188,8 +163,7 @@ function TeacherList() {
           return (
             <TeacherItem 
               key={teacher.id} 
-              teacher={teacher} 
-              favorited={favorites.includes(teacher.id)}
+              teacher={teacher}
             />
           )
         })}
