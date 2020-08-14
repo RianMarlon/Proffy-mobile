@@ -10,11 +10,12 @@ import logoImg from '../../assets/images/logo.png';
 import styles from './styles';
 
 interface PageHeaderProps {
+  namePage?: string
   title: string,
   headerRight?: ReactNode
 }
 
-const PageHeader: React.FC<PageHeaderProps> = ({ title, headerRight, children }) => {
+const PageHeader: React.FC<PageHeaderProps> = ({ namePage, title, headerRight, children }) => {
   const { navigate } = useNavigation();
 
   function handleGoBack() {
@@ -24,9 +25,11 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, headerRight, children })
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
-        <BorderlessButton onPress={handleGoBack}>
+        <BorderlessButton style={styles.buttonBack} onPress={handleGoBack}>
           <Image source={backIcon} resizeMode="contain" />
         </BorderlessButton>
+
+        <Text style={styles.namePage}>{namePage}</Text>
 
         <Image source={logoImg} resizeMode="contain" />
       </View>
@@ -36,7 +39,11 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, headerRight, children })
         {headerRight}
       </View>
 
-      {children}
+      { children && (
+        <View style={styles.children}>
+          {children}
+        </View>
+      )}
     </View>
   );
 }
