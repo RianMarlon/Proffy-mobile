@@ -47,7 +47,7 @@ const SelectPicker: React.FC<PickerProps> = ({ label, items, sort, style, ...res
           {...rest}
         >
           <Picker.Item 
-            label="Selecione uma opção..."
+            label="Selecione..."
             value=""
           />
 

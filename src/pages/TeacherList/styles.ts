@@ -56,8 +56,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 
-  inputBlock: {
-    width: '48%',
+  inputWeekDay: {
+    width: '64%',
+  },
+
+  inputTime: {
+    width: '32%',
   },
 
   input: {

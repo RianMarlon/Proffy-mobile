@@ -109,25 +109,25 @@ function TeacherList() {
             />
 
             <View style={styles.inputGroup}>
-              <View style={styles.inputBlock}>
-              <SelectPicker 
-                label="Dia da semana"
-                selectedValue={week_day}
-                onValueChange={(itemValue) => setWeekDay(itemValue)}
-                items={[
-                  { value: '0', label: 'Domingo' },
-                  { value: '1', label: 'Segunda-feira' },
-                  { value: '2', label: 'Terça-feira' },
-                  { value: '3', label: 'Quarta-feira' },
-                  { value: '4', label: 'Quinta-feira' },
-                  { value: '5', label: 'Sexta-feira' },
-                  { value: '6', label: 'Sábado' }
-                ]}
-                sort
-              />
+              <View style={styles.inputWeekDay}>
+                <SelectPicker 
+                  label="Dia da semana"
+                  selectedValue={week_day}
+                  onValueChange={(itemValue) => setWeekDay(itemValue)}
+                  items={[
+                    { value: '0', label: 'Domingo' },
+                    { value: '1', label: 'Segunda-feira' },
+                    { value: '2', label: 'Terça-feira' },
+                    { value: '3', label: 'Quarta-feira' },
+                    { value: '4', label: 'Quinta-feira' },
+                    { value: '5', label: 'Sexta-feira' },
+                    { value: '6', label: 'Sábado' }
+                  ]}
+                  sort
+                />
               </View>
 
-              <View style={styles.inputBlock}>
+              <View style={styles.inputTime}>
                 <Text style={styles.label}>Horário</Text>
                 <TextInput
                   style={styles.input}
