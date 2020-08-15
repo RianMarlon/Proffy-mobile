@@ -51,6 +51,20 @@ function TeacherList() {
       <PageHeader 
         namePage="Estudar"
         title="Proffys disponíveis"
+        headerRight={(
+          <View style={styles.infoNumberTeacher}>
+            <Text style={styles.emoji}>
+              🤓
+            </Text>
+            <Text style={styles.numberTeachers}>
+              { 
+                teachers.length > 1 
+                ? `${teachers.length} proffys`
+                : `${teachers.length} proffy`
+              }
+            </Text>
+          </View>
+        )}
       >
         <View style={styles.buttonFiltersGroup}>
           <BorderlessButton 
@@ -61,7 +75,7 @@ function TeacherList() {
             <Text style={styles.buttonText}>Filtrar por dia, matéria e hora</Text>
             <Feather 
               name={isFiltersVisible ? 'chevron-up' : 'chevron-down'} 
-              size={20} 
+              size={20}
               color="#A380F6"
             />
           </BorderlessButton>
