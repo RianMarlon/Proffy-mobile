@@ -18,6 +18,8 @@ function TeacherList() {
   const [week_day, setWeekDay] = useState('');
   const [time, setTime] = useState('');
 
+  const quantityTeachers = teachers.length;
+
   useEffect(() => {
     const params = {
       subject: '',
@@ -58,9 +60,9 @@ function TeacherList() {
             </Text>
             <Text style={styles.numberTeachers}>
               { 
-                teachers.length > 1 
-                ? `${teachers.length} proffys`
-                : `${teachers.length} proffy`
+                quantityTeachers > 1 
+                ? `${quantityTeachers} proffys`
+                : `${quantityTeachers} proffy`
               }
             </Text>
           </View>
