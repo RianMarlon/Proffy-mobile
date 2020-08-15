@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from 'react';
-import { View, ScrollView } from 'react-native';
+import React, { useContext } from 'react';
+import { View, ScrollView, Text } from 'react-native';
 
 import PageHeader from '../../components/PageHeader';
 import TeacherItem from '../../components/TeacherItem';
@@ -9,10 +9,28 @@ import styles from './styles';
 
 function Favorites() {
   const { teachers } = useContext(TeachersContext);
+  const isFavorited = (teacher: Teacher) => teacher.favorited;
+  const quantityFavorites = teachers.filter(isFavorited).length;
 
   return (
     <View style={styles.container}>
-      <PageHeader namePage="Estudar" title="Meus proffys favoritos" />
+      <PageHeader 
+        namePage="Estudar"
+        title="Meus proffys favoritos"
+        headerRight={(
+          <View style={styles.infoNumberTeacher}>
+            <Text style={styles.emoji}>
+              😍
+            </Text>
+            <Text style={styles.numberTeachers}>
+              { quantityFavorites > 1
+                ? `${quantityFavorites} proffys`
+                : `${quantityFavorites} proffy`
+              }
+            </Text>
+          </View>
+        )}
+      />
 
       <ScrollView
         style={styles.favorites}
@@ -21,14 +39,13 @@ function Favorites() {
           paddingBottom: 16
         }}
       >
-        {teachers.filter((teacher: Teacher) => teacher.favorited)
-          .map((teacherFavorited: Teacher) => {
-            return (
-              <TeacherItem 
-                key={teacherFavorited.id}
-                teacher={teacherFavorited}
-              />
-            );
+        {teachers.filter(isFavorited).map((teacherFavorited: Teacher) => {
+          return (
+            <TeacherItem 
+              key={teacherFavorited.id}
+              teacher={teacherFavorited}
+            />
+          );
         })}
       </ScrollView>
     </View>
