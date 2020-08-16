@@ -4,7 +4,7 @@ import { RectButton } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import api from '../../services/api';
-import TeachersContext, { Teacher } from '../../contexts/TeachersContext';
+import TeachersContext, { Teacher, Schedule } from '../../contexts/TeachersContext';
 
 import heartOutlineIcon from '../../assets/images/icons/heart-outline.png';
 import unfavoriteIcon from '../../assets/images/icons/unfavorite.png';
@@ -58,6 +58,34 @@ const TeacherItem:React.FC<TeacherItemProps> = ({ teacher }) => {
       </View>
 
       <Text style={styles.biography}>{teacher.biography}</Text>
+
+      <View style={styles.schedules}>
+        <View style={styles.schedulesTitlesGroup}>
+          <Text style={styles.schedulesTitleText}>Dia</Text>
+          <Text style={styles.schedulesTitleText}>Horário</Text>
+        </View>
+
+        { teacher.schedules.map((schedule: Schedule, index: number) => {
+          return (
+            <View key={schedule.id} style={styles.schedulePill}>
+              <Text style={[styles.scheduleText, { width: 62 }]}>
+                {schedule.week_day}
+              </Text>
+              <View style={styles.arrow}>
+                <View style={styles.arrowBase}></View>
+                <View style={styles.arrowTip}>
+                  <View style={styles.arrowTipTop} />
+                  <View style={styles.arrowTipBottom} />
+                </View>
+              </View>
+
+              <Text style={styles.scheduleText}>
+                {schedule.from.split(':')[0]}h - {schedule.to.split(':')[0]}h
+              </Text>
+            </View>
+          )
+        }) }
+      </View>
 
       <View style={styles.footer}>
         <Text style={styles.price}>

@@ -41,18 +41,95 @@ const styles = StyleSheet.create({
   },
 
   biography: {
-    marginHorizontal: 24,
+    paddingHorizontal: 24,
+    paddingBottom: 24,
     fontFamily: 'Poppins_400Regular',
     fontSize: 14,
     lineHeight: 27,
     color: '#6A6180',
   },
 
+  schedules: {
+    borderTopColor: '#E6E6F0',
+    borderTopWidth: 1,
+    borderBottomColor: '#E6E6F0',
+    borderBottomWidth: 1,
+    padding: 24,
+  },
+
+  schedulesTitlesGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+  },
+
+  schedulesTitleText: {
+    fontFamily: 'Poppins_400Regular',
+    color: '#9C98A6',
+  },
+
+  schedulePill: {
+    marginTop: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 10,
+    borderRadius: 8,
+    borderColor: '#FAFAFC',
+    borderWidth: 1,
+  },
+  
+  scheduleText: {
+    fontFamily: 'Archivo_700Bold',
+    color: '#6A6180',
+  },
+
+  arrow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  arrowBase: {
+    height: 2,
+    width: 70,
+    backgroundColor: '#E6E6F0',
+  },
+
+  arrowTip: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: -8,
+  },
+
+  arrowTipTop: {
+    marginBottom: 2,
+    height: 2,
+    width: 10,
+    backgroundColor: '#E6E6F0',
+    transform: [
+      { rotateY: "40deg" },
+      { rotateZ: "40deg" },
+    ],
+  },
+
+  arrowTipBottom: {
+    marginTop: 2,
+    height: 2,
+    width: 10,
+    backgroundColor: '#E6E6F0',
+    transform: [
+      { rotateY: "-40deg" },
+      { rotateZ: "-40deg" },
+    ],
+  },
+
   footer: {
     backgroundColor: '#FAFAFC',
     padding: 24,
     alignItems: 'center',
-    marginTop: 24,
   },
 
   price: {
