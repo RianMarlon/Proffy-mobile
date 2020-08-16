@@ -3,6 +3,13 @@ import React, { createContext, useState } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import api from '../services/api';
 
+export interface Schedule {
+  id: number,
+  week_day: string,
+  from: string,
+  to: string
+}
+
 export interface Teacher {
   id: number,
   avatar: string,
@@ -11,6 +18,7 @@ export interface Teacher {
   biography: string,
   cost: number,
   whatsapp: string,
+  schedules: [Schedule],
   favorited?: boolean,
 }
 
