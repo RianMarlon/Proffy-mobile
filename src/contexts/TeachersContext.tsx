@@ -38,7 +38,6 @@ const TeachersContext = createContext<TeachersContextData>({} as TeachersContext
 
 export const TeachersProvider: React.FC = ({ children }) => {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
-  const [favorites, setFavorites] = useState<number[]>([]);
 
   async function getFavorites() {
     const response = await AsyncStorage.getItem('favorites');
@@ -46,10 +45,9 @@ export const TeachersProvider: React.FC = ({ children }) => {
     if (response) {
       const favoritedTeachers = JSON.parse(response);
       const favoritedTeachersIds = favoritedTeachers.map((teacher: Teacher) => {
-        return teacher.id
+        return teacher.id;
       });
 
-      setFavorites([ ...favoritedTeachersIds ]);
       return [ ...favoritedTeachersIds ];
     }
   }
@@ -59,11 +57,11 @@ export const TeachersProvider: React.FC = ({ children }) => {
 
     if (response) {
       const data = response.data;
-      const allFavorites = await getFavorites() || [];
+      const favorites = await getFavorites() || [];
 
       const newTeachers = data.map((teacher: Teacher) => {
         const newTeacher: Teacher = { ...teacher, favorited: false };
-        if (allFavorites.includes(teacher.id)) {
+        if (favorites.includes(teacher.id)) {
           newTeacher.favorited = true;
         }
   
@@ -80,7 +78,7 @@ export const TeachersProvider: React.FC = ({ children }) => {
     >
       {children}
     </TeachersContext.Provider>
-  )
+  );
 }
 
 export default TeachersContext;
