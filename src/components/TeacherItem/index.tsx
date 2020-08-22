@@ -120,4 +120,4 @@ const TeacherItem:React.FC<TeacherItemProps> = ({ teacher }) => {
   );
 }
 
-export default TeacherItem;
+export default React.memo(TeacherItem);
