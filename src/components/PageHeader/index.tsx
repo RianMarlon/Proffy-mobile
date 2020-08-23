@@ -12,7 +12,7 @@ import styles from './styles';
 interface PageHeaderProps {
   namePage?: string
   title: string,
-  headerRight?: ReactNode
+  headerRight?: ReactNode,
 }
 
 const PageHeader: React.FC<PageHeaderProps> = ({ namePage, title, headerRight, children }) => {
@@ -36,7 +36,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ namePage, title, headerRight, c
 
       <View style={styles.header}>
         <Text style={styles.title}>{title}</Text>
-        {headerRight}
+        { headerRight && headerRight}
       </View>
 
       { children && (

@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 16,
     marginTop: 4,
-    marginBottom: 16
+    marginBottom: 16,
   },
 
   submitSearchButton: {
@@ -91,6 +91,13 @@ const styles = StyleSheet.create({
 
   teacherList: {
     marginTop: -40,
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+  },
+
+  loading: {
+    alignSelf: 'center',
+    marginVertical: 20,
   },
 });
 

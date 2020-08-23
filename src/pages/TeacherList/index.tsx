@@ -1,51 +1,129 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, ScrollView, Text } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, ListRenderItem } from 'react-native';
 import { TextInput, BorderlessButton, RectButton } from 'react-native-gesture-handler';
 import { Feather } from '@expo/vector-icons';
 
 import PageHeader from '../../components/PageHeader';
-import TeacherItem from '../../components/TeacherItem';
 import SelectPicker from '../../components/SelectPicker';
 import TeachersContext, { Teacher } from '../../contexts/TeachersContext';
 
 import styles from './styles';
+import TeacherItem from '../../components/TeacherItem';
+
+interface TeacherItemProps {
+  item: Teacher,
+}
 
 function TeacherList() {
-  const { teachers, getTeachers } = useContext(TeachersContext);
-  const [isFiltersVisible, setIsFiltersVisible] = useState(false);
+  const { teachers, getTeachers, quantityTeachers, quantityClasses } = useContext(TeachersContext);
 
   const [subject, setSubject] = useState('');
-  const [week_day, setWeekDay] = useState('');
+  const [weekDay, setWeekDay] = useState('');
   const [time, setTime] = useState('');
+  const [page, setPage] = useState(1);
+  const perPage = 2;
 
-  const quantityTeachers = teachers.length;
+  const [isFiltersVisible, setIsFiltersVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    const params = {
-      subject: '',
-      week_day: '',
-      time: '',
+    loadTeachers();
+  }, []);
+
+  async function loadTeachers() {
+    if (perPage * page > quantityClasses + perPage) {
+      return;
     }
 
-    getTeachers(params).then(() => {
-      setIsFiltersVisible(false);
-    });
-  }, []);
+    const params = {
+      subject,
+      week_day: weekDay,
+      time,
+      page,
+      per_page: perPage,
+    }
+
+    setLoading(true);
+
+    await getTeachers(params);
+
+    setLoading(false);
+
+    setPage(page + 1);
+  }
 
   function handleToggleFiltersVisible() {
     setIsFiltersVisible(!isFiltersVisible);
   }
 
-  function handleFiltersSubmit() {
+  async function handleFiltersSubmit() {
     const params = {
       subject,
-      week_day,
-      time
+      week_day: weekDay,
+      time,
+      page: 1,
+      per_page: perPage,
+    }
+
+    await getTeachers(params);
+
+    setPage(2);
+    setIsFiltersVisible(false);
+  }
+
+  function handleOnRefresh() {
+    setPage(1);
+    setRefreshing(true);
+    loadTeachers();
+    setRefreshing(false);
+  }
+
+  function addDigitInTime(digit: string) {
+    if (!digit.includes(':')) {
+      if (digit.length === 2) {
+        digit = digit + ':';
+      }
+
+      else if (digit.length === 5) {
+        digit = digit.slice(0, 2) + ':' + digit.slice(3, 5);
+      }
+    }
+
+    else {
+      if (digit.length === 5) {
+        const array = digit.split(':').map((value) => parseInt(value));
+
+        if (isNaN(array[0]) || isNaN(array[1])) {
+          digit = '00:00';
+        }
+        
+        else if ((array[0] > 23 || array[0] < 0)
+          || (array[1] > 59 || array[1] < 0)) {
+            digit = '00:00';
+        }
+      }
     }
     
-    getTeachers(params).then(() => {
-      setIsFiltersVisible(false);
-    });
+    setTime(digit);
+  }
+
+  function renderTeacherItem({ item }: TeacherItemProps) {
+    return (
+      <View>
+        <TeacherItem teacher={item} />
+      </View>
+    );
+  }
+  
+  function renderLoader() {
+    if (!loading) return null;
+
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator size="large" color="#8257E5" />
+      </View>
+    );
   }
 
   return (
@@ -112,7 +190,7 @@ function TeacherList() {
               <View style={styles.inputWeekDay}>
                 <SelectPicker 
                   label="Dia da semana"
-                  selectedValue={week_day}
+                  selectedValue={weekDay}
                   onValueChange={(itemValue) => setWeekDay(itemValue)}
                   items={[
                     { value: '0', label: 'Domingo' },
@@ -134,34 +212,7 @@ function TeacherList() {
                   value={time}
                   maxLength={5}
                   keyboardType='numeric'
-                  onChangeText={(text) => {
-                    if (!text.includes(':')) {
-                      if (text.length === 2) {
-                        text = text + ':';
-                      }
-
-                      else if (text.length === 5) {
-                        text = text.slice(0, 2) + ':' + text.slice(3, 5);
-                      }
-                    }
-
-                    else {
-                      if (text.length === 5) {
-                        const array = text.split(':').map((value) => parseInt(value));
-
-                        if (isNaN(array[0]) || isNaN(array[1])) {
-                          text = '00:00';
-                        }
-                        
-                        else if ((array[0] > 23 || array[0] < 0)
-                          || (array[1] > 59 || array[1] < 0)) {
-                            text = '00:00';
-                        }
-                      }
-                    }
-                    
-                    setTime(text);
-                  }}
+                  onChangeText={addDigitInTime}
                   placeholder="Qual o horário?"
                   placeholderTextColor="#C1BCCC"
                 />
@@ -177,22 +228,22 @@ function TeacherList() {
           </View>
         )}
       </PageHeader>
-      <ScrollView
-        style={styles.teacherList}
-        contentContainerStyle={{
-          paddingHorizontal: 16,
-          paddingBottom: 16
-        }}
-      >
-        {teachers.map((teacher: Teacher) => {
-          return (
-            <TeacherItem 
-              key={teacher.id} 
-              teacher={teacher}
-            />
-          )
-        })}
-      </ScrollView>
+
+      { teachers.length > 0 && (
+        <FlatList
+          style={styles.teacherList}
+          data={teachers}
+          renderItem={renderTeacherItem}
+          keyExtractor={(item) => {
+            return `${item.id}`;
+          }}
+          refreshing={refreshing}
+          onRefresh={handleOnRefresh}
+          onEndReached={loadTeachers}
+          onEndReachedThreshold={0.1}
+          ListFooterComponent = {renderLoader}
+        />
+      )}
     </View>
   );
 }
