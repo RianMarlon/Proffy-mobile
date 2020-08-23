@@ -26,18 +26,24 @@ interface ParamsProps {
   subject: string,
   week_day: string,
   time: string,
+  page: number,
+  per_page: number,
 }
 
 interface TeachersContextData {
   teachers: Teacher[],
   getTeachers(params: ParamsProps): Promise<void>,
-  setTeachers(teachers: Teacher[]): void,
+  setTeachers(teacher: Teacher[]): void,
+  quantityTeachers: number,
+  quantityClasses: number,
 }
 
 const TeachersContext = createContext<TeachersContextData>({} as TeachersContextData);
 
 export const TeachersProvider: React.FC = ({ children }) => {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [quantityTeachers, setQuantityTeachers] = useState(0);
+  const [quantityClasses, setQuantityClasses] = useState(0);
 
   async function getFavorites() {
     const response = await AsyncStorage.getItem('favorites');
@@ -53,28 +59,41 @@ export const TeachersProvider: React.FC = ({ children }) => {
   }
 
   async function getTeachers(params: ParamsProps) {
+    if (params.per_page * params.page > quantityClasses + params.per_page) {
+      return;
+    }
+
     const response = await api.get('/classes', { params });
 
     if (response) {
       const data = response.data;
-      const favorites = await getFavorites() || [];
-
-      const newTeachers = data.map((teacher: Teacher) => {
+      const allFavorites = await getFavorites() || [];
+  
+      const newTeachers = data.classesByPage.map((teacher: Teacher) => {
         const newTeacher: Teacher = { ...teacher, favorited: false };
-        if (favorites.includes(teacher.id)) {
+        if (allFavorites.includes(teacher.id)) {
           newTeacher.favorited = true;
         }
   
         return { ...newTeacher };
       });
 
-      setTeachers([ ...newTeachers ]);
+      setQuantityTeachers(data.quantityTeachers);
+      setQuantityClasses(data.quantityClasses);
+
+      if (params.page === 1) {
+        setTeachers([...newTeachers]);
+      }
+
+      else {
+        setTeachers([...teachers, ...newTeachers]);
+      }
     }
   }
 
   return (
     <TeachersContext.Provider 
-      value={{teachers, getTeachers, setTeachers}}
+      value={{teachers, getTeachers, setTeachers, quantityTeachers, quantityClasses}}
     >
       {children}
     </TeachersContext.Provider>
