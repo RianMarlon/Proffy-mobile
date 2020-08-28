@@ -12,9 +12,9 @@ const styles = StyleSheet.create({
   },
 
   emoji: {
-    fontFamily: 'Poppins_400Regular',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginRight: 8,
-    fontSize: 16,
   },
 
   numberTeachers: {
