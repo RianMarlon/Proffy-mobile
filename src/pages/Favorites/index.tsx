@@ -1,9 +1,11 @@
 import React, { useContext } from 'react';
-import { View, ScrollView, Text } from 'react-native';
+import { View, ScrollView, Text, Image } from 'react-native';
 
 import PageHeader from '../../components/PageHeader';
 import TeacherItem from '../../components/TeacherItem';
 import TeachersContext, { Teacher } from '../../contexts/TeachersContext';
+
+import inLoveIcon from '../../assets/images/icons/in-love.png';
 
 import styles from './styles';
 
@@ -19,9 +21,9 @@ function Favorites() {
         title="Meus proffys favoritos"
         headerRight={(
           <View style={styles.infoNumberTeacher}>
-            <Text style={styles.emoji}>
-              😍
-            </Text>
+            <View style={styles.emoji}>
+              <Image source={inLoveIcon} />
+            </View>
             <Text style={styles.numberTeachers}>
               { quantityFavorites > 1
                 ? `${quantityFavorites} proffys`
