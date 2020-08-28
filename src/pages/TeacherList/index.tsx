@@ -1,14 +1,16 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, FlatList, ActivityIndicator, ListRenderItem } from 'react-native';
+import React, { useState, useContext, useEffect, memo } from 'react';
+import { View, Text, FlatList, ActivityIndicator, Image } from 'react-native';
 import { TextInput, BorderlessButton, RectButton } from 'react-native-gesture-handler';
 import { Feather } from '@expo/vector-icons';
 
 import PageHeader from '../../components/PageHeader';
 import SelectPicker from '../../components/SelectPicker';
+import TeacherItem from '../../components/TeacherItem';
 import TeachersContext, { Teacher } from '../../contexts/TeachersContext';
 
+import smileIcon from '../../assets/images/icons/smile.png';
+
 import styles from './styles';
-import TeacherItem from '../../components/TeacherItem';
 
 interface TeacherItemProps {
   item: Teacher,
@@ -24,7 +26,7 @@ function TeacherList() {
   const perPage = 2;
 
   const [isFiltersVisible, setIsFiltersVisible] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [showLoading, setShowLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
@@ -44,11 +46,11 @@ function TeacherList() {
       per_page: perPage,
     }
 
-    setLoading(true);
+    setShowLoading(true);
 
     await getTeachers(params);
 
-    setLoading(false);
+    setShowLoading(false);
 
     setPage(page + 1);
   }
@@ -116,8 +118,8 @@ function TeacherList() {
     );
   }
   
-  function renderLoader() {
-    if (!loading) return null;
+  function renderLoading() {
+    if (!showLoading) return null;
 
     return (
       <View style={styles.loading}>
@@ -133,9 +135,9 @@ function TeacherList() {
         title="Proffys disponíveis"
         headerRight={(
           <View style={styles.infoNumberTeacher}>
-            <Text style={styles.emoji}>
-              🤓
-            </Text>
+            <View style={styles.emoji}>
+              <Image source={smileIcon} />
+            </View>
             <Text style={styles.numberTeachers}>
               { 
                 quantityTeachers > 1 
@@ -241,7 +243,7 @@ function TeacherList() {
           onRefresh={handleOnRefresh}
           onEndReached={loadTeachers}
           onEndReachedThreshold={0.1}
-          ListFooterComponent = {renderLoader}
+          ListFooterComponent = {renderLoading}
         />
       )}
     </View>
