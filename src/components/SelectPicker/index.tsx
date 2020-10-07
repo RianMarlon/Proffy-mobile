@@ -1,11 +1,15 @@
-import React  from 'react';
+import React from 'react';
 import { Picker } from '@react-native-community/picker';
-import { Text, PickerProperties, View } from 'react-native';
+import { Text, PickerProps, View, StyleSheet } from 'react-native';
 
 import styles from './styles';
 
-interface PickerProps extends PickerProperties  {
+interface PickerProperties extends PickerProps  {
   label: string,
+  labelColor?: string,
+  required?: boolean,
+  labelError?: string,
+  error?: boolean,
   items: Array<{
     value: string,
     label: string
@@ -18,7 +22,16 @@ interface ItemProps {
   label: string
 }
 
-const SelectPicker: React.FC<PickerProps> = ({ label, items, sort, style, ...rest }) => {
+const SelectPicker: React.FC<PickerProperties> = ({
+    label, labelColor='#9C98A6', required, labelError,
+    error, items, sort, ...rest 
+  }) => {
+
+  const styleLabel = StyleSheet.create({
+    color: {
+      color: labelColor,
+    }
+  });
 
   if (sort) {
     const functionComparation = (a: ItemProps, b: ItemProps) => {
@@ -40,15 +53,22 @@ const SelectPicker: React.FC<PickerProps> = ({ label, items, sort, style, ...res
   
   return (
     <>
-      <Text style={styles.label}>{label}</Text>
-      <View style={styles.picker} {...style}>
+      <Text style={error && required 
+        ? [styles.label, styles.error] 
+        : [styles.label, styleLabel.color] 
+      }>
+        {error && required ? labelError : label}
+      </Text>
+      <View style={styles.picker}>
         <Picker
           selectedValue=""
+          itemStyle={styles.itemPicker}
           {...rest}
         >
           <Picker.Item 
             label="Selecione..."
             value=""
+            color="#6A6180"
           />
 
           {items.map((item: ItemProps) => {
@@ -56,7 +76,8 @@ const SelectPicker: React.FC<PickerProps> = ({ label, items, sort, style, ...res
               <Picker.Item
                 key={item.value} 
                 label={item.label}
-                value={item.value} 
+                value={item.value}
+                color="#6A6180"
               />
             )
           })}

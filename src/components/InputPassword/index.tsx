@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { TextInputProps } from 'react-native';
-import { View, Text, Image } from 'react-native';
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import { View, Image } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+
+import InputLabel from '../InputLabel';
 
 import showIcon from '../../assets/images/icons/show.png';
 import doNotShowIcon from '../../assets/images/icons/do-not-show.png';
 
 import styles from './styles';
-import InputLabel from '../InputLabel';
 
 interface InputPasswordProps extends TextInputProps {
   label: string,
