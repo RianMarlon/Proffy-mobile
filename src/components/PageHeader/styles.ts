@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     color: '#D4C2FF',
   },
 
-  header: {
+  headerContent: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
@@ -43,6 +43,18 @@ const styles = StyleSheet.create({
     fontSize: 24,
     lineHeight: 32,
     maxWidth: 160,
+  },
+
+  description: {
+    marginTop: 10,
+    color: '#D4C2FF',
+    fontFamily: 'Poppins_400Regular',
+    fontSize: 14,
+    lineHeight: 24,
+  },
+
+  noHeaderRight: {
+    maxWidth: 900,
   },
 
   children: {
