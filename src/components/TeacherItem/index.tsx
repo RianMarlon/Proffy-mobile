@@ -11,23 +11,24 @@ import unfavoriteIcon from '../../assets/images/icons/unfavorite.png';
 import whatsappIcon from '../../assets/images/icons/whatsapp.png';
 
 import styles from './styles';
+
 interface TeacherItemProps {
   teacher: Teacher
 }
 
 const TeacherItem:React.FC<TeacherItemProps> = ({ teacher }) => {
   const { teachers, setTeachers } = useContext(TeachersContext);
+  const cost = parseFloat(teacher.cost).toFixed(2);
 
   function handleLinkToWhatsapp() {
-    api.post('/connections', {
-      id_user: teacher.id
-    });
+    const data = { id_class: teacher.id_class };
+    api.post('/connections', data);
     Linking.openURL(`whatsapp://send?phone=${teacher.whatsapp}`);
   }
 
   async function handleToggleFavorites() {
     const teachersArray = teachers.map((teacherItem: Teacher) => {
-      if (teacherItem.id === teacher.id) {
+      if (teacherItem.id_class === teacher.id_class) {
         teacher.favorited = !teacherItem.favorited;
         teacherItem.favorited = teacher.favorited;
       }
@@ -40,19 +41,22 @@ const TeacherItem:React.FC<TeacherItemProps> = ({ teacher }) => {
     });
 
     setTeachers(teachersArray);
-    await AsyncStorage.setItem('favorites', JSON.stringify(teachersFavorited));
+    await AsyncStorage.setItem('@proffy/favorites', JSON.stringify(teachersFavorited));
   }
 
   return (
     <View style={styles.container}>
       <View style={styles.profile}>
         <Image 
-          source={{ uri: teacher.avatar }}
+          source={{
+            uri: teacher.avatar 
+              || 'https://www.gravatar.com/avatar/f9879d71855b5ff21e4963273a886bfc?d=retro&r=g'
+          }}
           style={styles.avatar}
         />
 
         <View style={styles.profileInfo}>
-          <Text style={styles.name}>{teacher.name}</Text>
+          <Text style={styles.name}>{teacher.first_name} {teacher.last_name}</Text>
           <Text style={styles.subject}>{teacher.subject}</Text>
         </View>
       </View>
@@ -67,7 +71,7 @@ const TeacherItem:React.FC<TeacherItemProps> = ({ teacher }) => {
 
         { teacher.schedules.map((schedule: Schedule, index: number) => {
           return (
-            <View key={schedule.id} style={styles.schedulePill}>
+            <View key={schedule.id_class_schedule} style={styles.schedulePill}>
               <Text style={[styles.scheduleText, { width: 62 }]}>
                 {schedule.week_day}
               </Text>
@@ -90,7 +94,9 @@ const TeacherItem:React.FC<TeacherItemProps> = ({ teacher }) => {
       <View style={styles.footer}>
         <Text style={styles.price}>
           Preço/hora {'   '} 
-          <Text style={styles.priceValue}>R${teacher.cost}</Text>
+          <Text style={styles.priceValue}>
+            R${cost.replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.')}
+          </Text>
         </Text>
 
         <View style={styles.buttonsContainer}>
