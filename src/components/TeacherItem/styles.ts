@@ -24,19 +24,21 @@ const styles = StyleSheet.create({
   },
 
   profileInfo: {
-    marginLeft: 16,
+    marginHorizontal: 16,
   },
 
   name: {
-    fontFamily: 'Archivo_700Bold',
     color: '#32264D',
-    fontSize: 20,
+    fontFamily: 'Archivo_700Bold',
+    fontSize: 22,
+    lineHeight: 24,
+    marginRight: '20%',
   },
 
   subject: {
     fontFamily: 'Poppins_400Regular',
     color: '#646180',
-    fontSize: 12,
+    fontSize: 14,
     marginTop: 4,
   },
 
