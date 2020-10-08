@@ -4,26 +4,28 @@ import AsyncStorage from '@react-native-community/async-storage';
 import api from '../services/api';
 
 export interface Schedule {
-  id: number,
+  id_class_schedule: number,
   week_day: string,
   from: string,
   to: string,
 }
 
 export interface Teacher {
-  id: number,
+  id_class: number,
   avatar: string,
-  name: string,
+  first_name: string,
+  last_name: string,
+  email: string,
   subject: string,
   biography: string,
-  cost: number,
+  cost: string,
   whatsapp: string,
   schedules: [Schedule],
   favorited?: boolean,
 }
 
 interface ParamsProps {
-  subject: string,
+  id_subject: string,
   week_day: string,
   time: string,
   page: number,
@@ -46,12 +48,12 @@ export const TeachersProvider: React.FC = ({ children }) => {
   const [quantityClasses, setQuantityClasses] = useState(0);
 
   async function getFavorites() {
-    const response = await AsyncStorage.getItem('favorites');
+    const response = await AsyncStorage.getItem('@proffy/favorites');
 
     if (response) {
       const favoritedTeachers = JSON.parse(response);
       const favoritedTeachersIds = favoritedTeachers.map((teacher: Teacher) => {
-        return teacher.id;
+        return teacher.id_class;
       });
 
       return [ ...favoritedTeachersIds ];
@@ -71,7 +73,7 @@ export const TeachersProvider: React.FC = ({ children }) => {
   
       const newTeachers = data.classesByPage.map((teacher: Teacher) => {
         const newTeacher: Teacher = { ...teacher, favorited: false };
-        if (allFavorites.includes(teacher.id)) {
+        if (allFavorites.includes(teacher.id_class)) {
           newTeacher.favorited = true;
         }
   
