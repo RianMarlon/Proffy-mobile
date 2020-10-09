@@ -44,7 +44,7 @@ function Favorites() {
         {teachers.filter(isFavorited).map((teacherFavorited: Teacher) => {
           return (
             <TeacherItem 
-              key={teacherFavorited.id}
+              key={teacherFavorited.id_class}
               teacher={teacherFavorited}
             />
           );
