@@ -49,9 +49,12 @@ const styles = StyleSheet.create({
   label: {
     color: '#D4C2FF',
     fontFamily: 'Poppins_400Regular',
+    lineHeight: 22,
   },
 
   inputGroup: {
+    marginTop: 16,
+    marginBottom: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -66,11 +69,11 @@ const styles = StyleSheet.create({
 
   input: {
     height: 54,
+    marginTop: 4,
     backgroundColor: '#FFF',
     borderRadius: 8,
     justifyContent: 'center',
-    paddingHorizontal: 16,
-    marginTop: 4,
+    paddingHorizontal: 20,
     marginBottom: 16,
   },
 
