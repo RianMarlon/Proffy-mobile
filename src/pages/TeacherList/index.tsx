@@ -1,7 +1,9 @@
-import React, { useState, useContext, useEffect, memo } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, FlatList, ActivityIndicator, Image } from 'react-native';
-import { TextInput, BorderlessButton, RectButton } from 'react-native-gesture-handler';
+import { BorderlessButton, RectButton } from 'react-native-gesture-handler';
 import { Feather } from '@expo/vector-icons';
+
+import api from '../../services/api';
 
 import PageHeader from '../../components/PageHeader';
 import SelectPicker from '../../components/SelectPicker';
@@ -11,26 +13,47 @@ import TeachersContext, { Teacher } from '../../contexts/TeachersContext';
 import smileIcon from '../../assets/images/icons/smile.png';
 
 import styles from './styles';
+import Input from '../../components/Input';
 
 interface TeacherItemProps {
   item: Teacher,
 }
 
 function TeacherList() {
-  const { teachers, getTeachers, quantityTeachers, quantityClasses } = useContext(TeachersContext);
+  const {
+    teachers, getTeachers,
+    quantityTeachers, quantityClasses
+  } = useContext(TeachersContext);
 
-  const [subject, setSubject] = useState('');
+  const [idSubject, setIdSubject] = useState('');
   const [weekDay, setWeekDay] = useState('');
   const [time, setTime] = useState('');
+
   const [page, setPage] = useState(1);
-  const perPage = 2;
+  const perPage = 5;
+
+  const [subjects, setSubjects] = useState<any>([
+    { id: '', subject: '' }
+  ]);
 
   const [isFiltersVisible, setIsFiltersVisible] = useState(false);
   const [showLoading, setShowLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [isFirstSearch, setIsFirstSearch] = useState(false);
 
   useEffect(() => {
-    loadTeachers();
+    (async () => {
+      try {
+        const response = await api.get('/subjects');
+        const { subjects } = response.data;
+        setSubjects([ ...subjects ]);
+
+        await loadTeachers();
+      }
+      finally {
+        setIsFirstSearch(true);
+      }
+    })();
   }, []);
 
   async function loadTeachers() {
@@ -39,7 +62,7 @@ function TeacherList() {
     }
 
     const params = {
-      subject,
+      id_subject: idSubject,
       week_day: weekDay,
       time,
       page,
@@ -61,14 +84,19 @@ function TeacherList() {
 
   async function handleFiltersSubmit() {
     const params = {
-      subject,
+      id_subject: idSubject,
       week_day: weekDay,
       time,
       page: 1,
       per_page: perPage,
     }
 
-    await getTeachers(params);
+    try {
+      await getTeachers(params);
+    }
+    finally {
+      setIsFirstSearch(true);
+    }
 
     setPage(2);
     setIsFiltersVisible(false);
@@ -81,33 +109,35 @@ function TeacherList() {
     setRefreshing(false);
   }
 
-  function addDigitInTime(digit: string) {
-    if (!digit.includes(':')) {
-      if (digit.length === 2) {
-        digit = digit + ':';
+  function addValueInTime(newValue: string) {
+    newValue = newValue.trim();
+
+    if (!newValue.includes(':')) {
+      if (newValue.length === 2) {
+        newValue = newValue + ':';
       }
 
-      else if (digit.length === 5) {
-        digit = digit.slice(0, 2) + ':' + digit.slice(3, 5);
+      else if (newValue.length === 5) {
+        newValue = newValue.slice(0, 2) + ':' + newValue.slice(3, 5);
       }
     }
 
     else {
-      if (digit.length === 5) {
-        const array = digit.split(':').map((value) => parseInt(value));
+      if (newValue.length === 5) {
+        const array = newValue.split(':').map((value) => parseInt(value));
 
         if (isNaN(array[0]) || isNaN(array[1])) {
-          digit = '00:00';
+          newValue = '00:00';
         }
         
         else if ((array[0] > 23 || array[0] < 0)
           || (array[1] > 59 || array[1] < 0)) {
-            digit = '00:00';
+            newValue = '00:00';
         }
       }
     }
     
-    setTime(digit);
+    setTime(newValue);
   }
 
   function renderTeacherItem({ item }: TeacherItemProps) {
@@ -167,33 +197,21 @@ function TeacherList() {
           <View style={styles.searchForm}>
             <SelectPicker 
               label="Matéria"
-              selectedValue={subject}
-              onValueChange={(itemValue) => setSubject(itemValue)}
-              items={[
-                { value: 'Biologia', label: 'Biologia' },
-                { value: 'Matemática', label: 'Matemática' },
-                { value: 'Física', label: 'Física' },
-                { value: 'Química', label: 'Quimíca' },
-                { value: 'Português', label: 'Português' },
-                { value: 'Redação', label: 'Redação' },
-                { value: 'História', label: 'História' },
-                { value: 'Filosofia', label: 'Filosofia' },
-                { value: 'Geografia', label: 'Geografia' },
-                { value: 'Sociologia', label: 'Sociologia' },
-                { value: 'Inglês', label: 'Inglês' },
-                { value: 'Espanhol', label: 'Espanhol' },
-                { value: 'Educação Física', label: 'Educação Física' },
-                { value: 'Artes', label: 'Artes' }
-              ]}
-              sort
+              labelColor="#D4C2FF"
+              selectedValue={idSubject}
+              onValueChange={(newValue) => setIdSubject(newValue)}
+              items={subjects.map((subject: { id: number, subject: string }) => {
+                return { value: `${subject.id}`, label: subject.subject }
+              })}
             />
 
             <View style={styles.inputGroup}>
               <View style={styles.inputWeekDay}>
                 <SelectPicker 
                   label="Dia da semana"
+                  labelColor="#D4C2FF"
                   selectedValue={weekDay}
-                  onValueChange={(itemValue) => setWeekDay(itemValue)}
+                  onValueChange={(newValue) => setWeekDay(newValue)}
                   items={[
                     { value: '0', label: 'Domingo' },
                     { value: '1', label: 'Segunda-feira' },
@@ -208,13 +226,13 @@ function TeacherList() {
               </View>
 
               <View style={styles.inputTime}>
-                <Text style={styles.label}>Horário</Text>
-                <TextInput
-                  style={styles.input}
+                <Input 
+                  label="Horário"
+                  labelColor="#D4C2FF"
                   value={time}
                   maxLength={5}
                   keyboardType='numeric'
-                  onChangeText={addDigitInTime}
+                  onChangeText={addValueInTime}
                   placeholder="Qual o horário?"
                   placeholderTextColor="#C1BCCC"
                 />
@@ -237,12 +255,12 @@ function TeacherList() {
           data={teachers}
           renderItem={renderTeacherItem}
           keyExtractor={(item) => {
-            return `${item.id}`;
+            return `${item.id_class}`;
           }}
           refreshing={refreshing}
           onRefresh={handleOnRefresh}
           onEndReached={loadTeachers}
-          onEndReachedThreshold={0.1}
+          onEndReachedThreshold={0.5}
           ListFooterComponent = {renderLoading}
         />
       )}
