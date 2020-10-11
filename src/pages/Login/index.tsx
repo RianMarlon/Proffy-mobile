@@ -3,6 +3,7 @@ import { View, Text, ImageBackground, ScrollView } from 'react-native';
 import { RectButton, TouchableOpacity  } from 'react-native-gesture-handler';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
+import Toast from 'react-native-root-toast';
 
 import api from '../../services/api';
 import { hasTokenValid, TOKEN_KEY } from '../../services/auth';
@@ -34,6 +35,10 @@ function Login() {
   const [rememberMe, setRememberMe] = useState(false);
   const [buttonSubmitDisabled, setButtonSubmitDisabled] = useState(true);
   const regexValidateEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastVisibility, setToastVisibility] = useState(false);
+  const [toastBackgroundColor, setToastBackgroundColor] = useState('#07BC0C');
 
   useFocusEffect(
     React.useCallback(() => {
@@ -93,13 +98,29 @@ function Login() {
         const data = response.data;
         const messageError = data.error ? data.error 
           : 'Ocorreu um erro inesperado!';
-          
-        console.log(messageError);
+
+        setToastMessage(messageError);
+        setToastBackgroundColor('#E74C3C');
+
+        setToastVisibility(true);
+        setTimeout(() => setToastVisibility(false), 5000); 
       });
   }
 
   return (
     <ScrollView style={styles.container}>
+      <Toast
+        visible={toastVisibility}
+        textColor="#FFFFFF"
+        backgroundColor={toastBackgroundColor}
+        opacity={1}
+        position={50}
+        shadow={false}
+        animation={false}
+        hideOnPress={true}
+      >
+        { toastMessage }
+      </Toast>
       <View style={styles.header}>
         <Proffy />
       </View>
