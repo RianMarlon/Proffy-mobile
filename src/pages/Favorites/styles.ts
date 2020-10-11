@@ -25,6 +25,13 @@ const styles = StyleSheet.create({
 
   favorites: {
     marginTop: -40,
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+  },
+
+  loading: {
+    alignSelf: 'center',
+    marginVertical: 20,
   },
 });
 

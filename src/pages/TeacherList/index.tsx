@@ -5,15 +5,16 @@ import { Feather } from '@expo/vector-icons';
 
 import api from '../../services/api';
 
+import TeachersContext, { Teacher } from '../../contexts/TeachersContext';
+
 import PageHeader from '../../components/PageHeader';
+import Input from '../../components/Input';
 import SelectPicker from '../../components/SelectPicker';
 import TeacherItem from '../../components/TeacherItem';
-import TeachersContext, { Teacher } from '../../contexts/TeachersContext';
 
 import smileIcon from '../../assets/images/icons/smile.png';
 
 import styles from './styles';
-import Input from '../../components/Input';
 
 interface TeacherItemProps {
   item: Teacher,
@@ -22,7 +23,7 @@ interface TeacherItemProps {
 function TeacherList() {
   const {
     teachers, getTeachers,
-    quantityTeachers, quantityClasses
+    quantityTeachers
   } = useContext(TeachersContext);
 
   const [idSubject, setIdSubject] = useState('');
@@ -57,7 +58,7 @@ function TeacherList() {
   }, []);
 
   async function loadTeachers() {
-    if (perPage * page > quantityClasses + perPage) {
+    if (perPage * page > quantityTeachers + perPage) {
       return;
     }
 
@@ -94,6 +95,7 @@ function TeacherList() {
     try {
       await getTeachers(params);
     }
+
     finally {
       setIsFirstSearch(true);
     }
