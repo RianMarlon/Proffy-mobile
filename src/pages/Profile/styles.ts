@@ -13,13 +13,14 @@ const styles = StyleSheet.create({
   headerContent: {
     flex: 1,
     height: '100%',
-    marginTop: 18,
+    marginTop: 30,
     marginBottom: 40,
     justifyContent: 'center',
     alignItems: 'center',
   },
 
   imageBackground: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',

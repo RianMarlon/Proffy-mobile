@@ -1,6 +1,5 @@
 import React, { createContext, useState } from 'react';
 
-import AsyncStorage from '@react-native-community/async-storage';
 import api from '../services/api';
 
 export interface Schedule {
@@ -21,10 +20,15 @@ export interface Teacher {
   cost: string,
   whatsapp: string,
   schedules: [Schedule],
-  favorited?: boolean,
+  is_favorite: boolean,
 }
 
-interface ParamsProps {
+interface ParamsFavoritesProps {
+  page: number,
+  per_page: number,
+}
+
+interface ParamsClassesProps {
   id_subject: string,
   week_day: string,
   time: string,
@@ -34,34 +38,52 @@ interface ParamsProps {
 
 interface TeachersContextData {
   teachers: Teacher[],
-  getTeachers(params: ParamsProps): Promise<void>,
+  favorites: Teacher[],
+  getTeachers(params: ParamsClassesProps): Promise<void>,
+  getFavorites(params: ParamsFavoritesProps): Promise<void>,
   setTeachers(teacher: Teacher[]): void,
+  setFavorites(teacher: Teacher[]): void,
+  setQuantityFavorites(num: number): void,
   quantityTeachers: number,
-  quantityClasses: number,
+  quantityFavorites: number,
 }
 
 const TeachersContext = createContext<TeachersContextData>({} as TeachersContextData);
 
 export const TeachersProvider: React.FC = ({ children }) => {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [favorites, setFavorites] = useState<Teacher[]>([]);
   const [quantityTeachers, setQuantityTeachers] = useState(0);
-  const [quantityClasses, setQuantityClasses] = useState(0);
+  const [quantityFavorites, setQuantityFavorites] = useState(0);
 
-  async function getFavorites() {
-    const response = await AsyncStorage.getItem('@proffy/favorites');
+  async function getFavorites(params: ParamsFavoritesProps) {
+    if (quantityFavorites > 0 && 
+      params.per_page * params.page >= quantityFavorites + params.per_page) {
+      return;
+    }
+
+    const response = await api.get('/favorites', { params });
 
     if (response) {
-      const favoritedTeachers = JSON.parse(response);
-      const favoritedTeachersIds = favoritedTeachers.map((teacher: Teacher) => {
-        return teacher.id_class;
-      });
+      const data = response.data;
+  
+      const newFavorites = [...data.favorites_by_page];
 
-      return [ ...favoritedTeachersIds ];
+      setQuantityFavorites(data.quantity_favorites);
+
+      if (params.page === 1) {
+        setFavorites([...newFavorites]);
+      }
+
+      else {
+        setFavorites([...favorites, ...newFavorites]);
+      }
     }
   }
 
-  async function getTeachers(params: ParamsProps) {
-    if (params.per_page * params.page > quantityClasses + params.per_page) {
+  async function getTeachers(params: ParamsClassesProps) {
+    if (quantityTeachers > 0 && 
+      params.per_page * params.page >= quantityTeachers + params.per_page) {
       return;
     }
 
@@ -69,19 +91,10 @@ export const TeachersProvider: React.FC = ({ children }) => {
 
     if (response) {
       const data = response.data;
-      const allFavorites = await getFavorites() || [];
   
-      const newTeachers = data.classesByPage.map((teacher: Teacher) => {
-        const newTeacher: Teacher = { ...teacher, favorited: false };
-        if (allFavorites.includes(teacher.id_class)) {
-          newTeacher.favorited = true;
-        }
-  
-        return { ...newTeacher };
-      });
+      const newTeachers = [ ...data.classes_by_page ];
 
-      setQuantityTeachers(data.quantityTeachers);
-      setQuantityClasses(data.quantityClasses);
+      setQuantityTeachers(data.quantity_teachers);
 
       if (params.page === 1) {
         setTeachers([...newTeachers]);
@@ -95,7 +108,12 @@ export const TeachersProvider: React.FC = ({ children }) => {
 
   return (
     <TeachersContext.Provider 
-      value={{teachers, getTeachers, setTeachers, quantityTeachers, quantityClasses}}
+      value={{
+        teachers, favorites, 
+        getTeachers, getFavorites, 
+        setTeachers, setFavorites, setQuantityFavorites,
+        quantityTeachers, quantityFavorites
+      }}
     >
       {children}
     </TeachersContext.Provider>
