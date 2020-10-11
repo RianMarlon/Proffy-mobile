@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { View, Image, Text, ImageSourcePropType } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -8,6 +8,7 @@ import { removeToken } from '../../services/auth';
 import offIcon from '../../assets/images/icons/off-icon.png';
 
 import styles from './styles';
+import AuthContext from '../../contexts/AuthContext';
 
 export interface HeaderProfileProps {
   image: ImageSourcePropType,
@@ -15,12 +16,14 @@ export interface HeaderProfileProps {
 }
 
 const HeaderProfile: React.FC<HeaderProfileProps> = ({ image, name }) => {
+  
+  const { checkToken } = useContext(AuthContext);
 
   const { navigate } = useNavigation();
 
   function onPressOff() {
     removeToken();
-    navigate('Login');
+    checkToken();
   }
 
   function navigateMyProfile() {

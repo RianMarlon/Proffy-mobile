@@ -6,6 +6,7 @@ import { Feather } from '@expo/vector-icons';
 import api from '../../services/api';
 
 import TeachersContext, { Teacher } from '../../contexts/TeachersContext';
+import AuthContext from '../../contexts/AuthContext';
 
 import PageHeader from '../../components/PageHeader';
 import Input from '../../components/Input';
@@ -21,6 +22,9 @@ interface TeacherItemProps {
 }
 
 function TeacherList() {
+
+  const { checkToken } = useContext(AuthContext);
+  
   const {
     teachers, getTeachers,
     quantityTeachers
@@ -43,6 +47,7 @@ function TeacherList() {
   const [isFirstSearch, setIsFirstSearch] = useState(false);
 
   useEffect(() => {
+    checkToken();
     (async () => {
       try {
         const response = await api.get('/subjects');

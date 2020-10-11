@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { View, Image, Text, Linking } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
-import AsyncStorage from '@react-native-community/async-storage';
 
 import api from '../../services/api';
 import TeachersContext, { Teacher, Schedule } from '../../contexts/TeachersContext';
@@ -22,6 +21,7 @@ const TeacherItem:React.FC<TeacherItemProps> = ({ teacher }) => {
     setFavorites, setTeachers,
     setQuantityFavorites,
   } = useContext(TeachersContext);
+  
   const cost = parseFloat(teacher.cost).toFixed(2);
 
   function handleLinkToWhatsapp() {

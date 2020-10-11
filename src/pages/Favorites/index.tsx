@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Image, ActivityIndicator, FlatList } from 'react-native';
 
+import TeachersContext, { Teacher } from '../../contexts/TeachersContext';
+import AuthContext from '../../contexts/AuthContext';
+
 import PageHeader from '../../components/PageHeader';
 import TeacherItem from '../../components/TeacherItem';
-import TeachersContext, { Teacher } from '../../contexts/TeachersContext';
 
 import inLoveIcon from '../../assets/images/icons/in-love.png';
 
@@ -14,6 +16,9 @@ interface FavoriteItemProps {
 }
 
 function Favorites() {
+  
+  const { checkToken } = useContext(AuthContext);
+
   const {
     favorites, getFavorites,
     quantityFavorites
@@ -27,6 +32,7 @@ function Favorites() {
   const [isFirstSearch, setIsFirstSearch] = useState(false);
 
   useEffect(() => {
+    checkToken();
     loadTeachers()
       .catch(() => {
         setIsFirstSearch(true);
@@ -34,7 +40,7 @@ function Favorites() {
   }, []);
 
   async function loadTeachers() {
-    if (quantityFavorites > 0 && perPage * page >= quantityFavorites + perPage) {
+    if (perPage * page > quantityFavorites + perPage) {
       return;
     }
 

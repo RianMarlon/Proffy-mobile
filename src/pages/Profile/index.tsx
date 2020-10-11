@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Image, ScrollView, ImageBackground, Platform } from 'react-native';
 import { RectButton  } from 'react-native-gesture-handler';
 import * as ImagePicker from 'expo-image-picker';
@@ -6,6 +6,8 @@ import Toast from 'react-native-root-toast';
 
 import api from '../../services/api';
 import useForm from '../../hooks/useForm';
+
+import AuthContext from '../../contexts/AuthContext';
 
 import Navbar from '../../components/Navbar';
 import Input from '../../components/Input';
@@ -19,6 +21,8 @@ import cameraIcon from '../../assets/images/icons/camera-icon.png';
 import styles from './styles';
 
 function Profile() {
+
+  const { checkToken } = useContext(AuthContext);
 
   const initialFields = {
     whatsapp: '',
@@ -64,6 +68,8 @@ function Profile() {
   const [toastBackgroundColor, setToastBackgroundColor] = useState('#07BC0C');
 
   useEffect(() => {
+    checkToken();
+    
     if (Platform.OS !== 'web') {
       ImagePicker.requestCameraRollPermissionsAsync()
         .then((response) => {

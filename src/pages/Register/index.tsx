@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, Image } from 'react-native';
 import { RectButton, TouchableOpacity  } from 'react-native-gesture-handler';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-root-toast';
 
 import api from '../../services/api';
-import { hasTokenValid } from '../../services/auth';
 import useForm from '../../hooks/useForm';
 
 import Success from '../../components/Success';
@@ -46,15 +45,6 @@ function Register() {
   const [toastMessage, setToastMessage] = useState('');
   const [toastVisibility, setToastVisibility] = useState(false);
   const [toastBackgroundColor, setToastBackgroundColor] = useState('#07BC0C');
-
-  useFocusEffect(
-    React.useCallback(() => {
-      hasTokenValid()
-        .then((response) => {
-          if (response) navigate('Landing');
-        });
-    }, [])
-  );
 
   useEffect(() => {
     const hasValidEmail = regexValidateEmail.test(form.email);

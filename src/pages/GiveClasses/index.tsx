@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Image, ScrollView } from 'react-native';
 import { RectButton  } from 'react-native-gesture-handler';
 import Toast from 'react-native-root-toast';
 
 import api from '../../services/api';
 import useForm from '../../hooks/useForm';
+
+import AuthContext from '../../contexts/AuthContext';
 
 import PageHeader from '../../components/PageHeader';
 import Input from '../../components/Input';
@@ -17,6 +19,8 @@ import warningIcon from '../../assets/images/icons/warning.png';
 import styles from './styles';
 
 function GiveClasses() {
+
+  const { checkToken } = useContext(AuthContext);
 
   const initialFields = {
     whatsapp: '',
@@ -55,6 +59,8 @@ function GiveClasses() {
   const [toastBackgroundColor, setToastBackgroundColor] = useState('#07BC0C');
 
   useEffect(() => {
+    checkToken();
+    
     api.get('/me')
       .then(response => {
         const { user } = response.data;
