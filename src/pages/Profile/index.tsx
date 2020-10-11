@@ -321,7 +321,7 @@ function Profile() {
 
                   <View style={styles.teacherInfo}>
                     <Text style={styles.name}>
-                      {`${me.first_name} ${me.last_name}`}
+                      {me.first_name}
                     </Text>
                     <Text style={styles.class}>
                       {me.subject}
