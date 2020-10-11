@@ -4,11 +4,12 @@ const styles = StyleSheet.create({
   proffyContainer: {
     flex: 1,
     backgroundColor: '#8257E5',
-    padding: 40,
+    height: 300,
   },
 
   proffyBackgroundImage: {
     flex: 1,
+    margin: 40,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -22,7 +23,7 @@ const styles = StyleSheet.create({
 
   logo: {
     height: 55,
-    width: 180,
+    width: 160,
     resizeMode: 'contain',
   },
 
@@ -32,6 +33,7 @@ const styles = StyleSheet.create({
   },
 
   textSlogan: {
+    width: 130,
     color: '#D4C2FF',
     fontFamily: 'Poppins_400Regular',
     fontSize: 14,
