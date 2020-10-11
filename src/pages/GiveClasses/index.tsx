@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView } from 'react-native';
 import { RectButton  } from 'react-native-gesture-handler';
+import Toast from 'react-native-root-toast';
 
 import api from '../../services/api';
 import useForm from '../../hooks/useForm';
@@ -48,6 +49,10 @@ function GiveClasses() {
   const [scheduleItems, setScheduleItems] = useState([...initialStateScheduleItems]);
 
   const [isSuccess, setIsSuccess] = useState(false);
+
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastVisibility, setToastVisibility] = useState(false);
+  const [toastBackgroundColor, setToastBackgroundColor] = useState('#07BC0C');
 
   useEffect(() => {
     api.get('/me')
@@ -167,8 +172,12 @@ function GiveClasses() {
         const data = response.data;
         const messageError = data.error ? data.error 
           : 'Ocorreu um erro inesperado!';
-        
-        console.log(messageError);
+
+        setToastMessage(messageError);
+        setToastBackgroundColor('#E74C3C');
+
+        setToastVisibility(true);
+        setTimeout(() => setToastVisibility(false), 5000);
       });
   }
 
@@ -177,6 +186,18 @@ function GiveClasses() {
       {
         !isSuccess ? (
           <ScrollView style={styles.container}>
+            <Toast
+              visible={toastVisibility}
+              textColor="#FFFFFF"
+              backgroundColor={toastBackgroundColor}
+              opacity={1}
+              position={50}
+              shadow={false}
+              animation={false}
+              hideOnPress={true}
+            >
+              { toastMessage }
+            </Toast>
             <PageHeader
               namePage="Dar aulas"
               title="Que incrível que você quer dar aulas" 
