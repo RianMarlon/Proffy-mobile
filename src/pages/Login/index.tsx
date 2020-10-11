@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, ImageBackground, ScrollView } from 'react-native';
 import { RectButton, TouchableOpacity  } from 'react-native-gesture-handler';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Toast from 'react-native-root-toast';
 
 import api from '../../services/api';
-import { hasTokenValid, TOKEN_KEY } from '../../services/auth';
+import { TOKEN_KEY } from '../../services/auth';
+
+import AuthContext from '../../contexts/AuthContext';
+
 import useForm from '../../hooks/useForm';
 
 import Proffy from '../../components/Proffy';
@@ -19,6 +22,7 @@ import styles from './styles';
 
 function Login() {
 
+  const { checkToken } = useContext(AuthContext);
   const { navigate } = useNavigation();
 
   const initialFields = {
@@ -39,15 +43,6 @@ function Login() {
   const [toastMessage, setToastMessage] = useState('');
   const [toastVisibility, setToastVisibility] = useState(false);
   const [toastBackgroundColor, setToastBackgroundColor] = useState('#07BC0C');
-
-  useFocusEffect(
-    React.useCallback(() => {
-      hasTokenValid()
-        .then((response) => {
-          if (response) navigate('Landing');
-        });
-    }, [])
-  );
 
   useEffect(() => {
     const hasValidEmail = regexValidateEmail.test(form.email);
@@ -91,8 +86,7 @@ function Login() {
         const { token } = response.data;
 
         AsyncStorage.setItem(TOKEN_KEY, token);
-
-        navigate('Landing');
+        checkToken();
       })
       .catch(({ response }) => {
         const data = response.data;
