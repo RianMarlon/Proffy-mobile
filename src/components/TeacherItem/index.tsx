@@ -17,7 +17,11 @@ interface TeacherItemProps {
 }
 
 const TeacherItem:React.FC<TeacherItemProps> = ({ teacher }) => {
-  const { teachers, setTeachers } = useContext(TeachersContext);
+  const { 
+    teachers, favorites, getFavorites,
+    setFavorites, setTeachers,
+    setQuantityFavorites,
+  } = useContext(TeachersContext);
   const cost = parseFloat(teacher.cost).toFixed(2);
 
   function handleLinkToWhatsapp() {
@@ -27,21 +31,56 @@ const TeacherItem:React.FC<TeacherItemProps> = ({ teacher }) => {
   }
 
   async function handleToggleFavorites() {
-    const teachersArray = teachers.map((teacherItem: Teacher) => {
-      if (teacherItem.id_class === teacher.id_class) {
-        teacher.favorited = !teacherItem.favorited;
-        teacherItem.favorited = teacher.favorited;
+    const data = {
+      id_class: teacher.id_class
+    }
+
+    const page = 1;
+    const perPage = 5;
+    
+    const response = await api.post('/favorites', data);
+    
+    const favoritesNoEqualTeacher = favorites.filter((teacherItem: Teacher) => {
+      return teacherItem.id_class != teacher.id_class;
+    });
+    
+    const { it_was_inserted } = response.data;
+
+    if (it_was_inserted) {
+      getFavorites({ per_page: perPage, page });
+
+      const teachersArray = teachers.map((teacherItem: Teacher) => {
+        if (teacherItem.id_class === teacher.id_class) {
+          return { ...teacher, is_favorite: true };
+        }
+  
+        return teacherItem;
+      });
+
+      setTeachers(teachersArray);
+    }
+
+    else {
+      if (favorites.length == 1) {
+        setFavorites([]);
+        setQuantityFavorites(0);
       }
 
-      return teacherItem;
-    });
+      else {
+        setFavorites(favoritesNoEqualTeacher);
+        setQuantityFavorites(favoritesNoEqualTeacher.length);
+      }
 
-    const teachersFavorited = teachersArray.filter((teacherItem: Teacher) => {
-      return teacherItem.favorited;
-    });
+      const teachersArray = teachers.map((teacherItem: Teacher) => {
+        if (teacherItem.id_class === teacher.id_class) {
+          return { ...teacher, is_favorite: false };
+        }
+  
+        return teacherItem;
+      });
 
-    setTeachers(teachersArray);
-    await AsyncStorage.setItem('@proffy/favorites', JSON.stringify(teachersFavorited));
+      setTeachers([...teachersArray]);
+    }
   }
 
   return (
@@ -71,7 +110,7 @@ const TeacherItem:React.FC<TeacherItemProps> = ({ teacher }) => {
 
         { teacher.schedules.map((schedule: Schedule, index: number) => {
           return (
-            <View key={schedule.id_class_schedule} style={styles.schedulePill}>
+            <View key={index} style={styles.schedulePill}>
               <Text style={[styles.scheduleText, { width: 62 }]}>
                 {schedule.week_day}
               </Text>
@@ -104,10 +143,10 @@ const TeacherItem:React.FC<TeacherItemProps> = ({ teacher }) => {
             onPress={handleToggleFavorites}  
             style={[
                 styles.favoriteButton, 
-                teacher.favorited ? styles.favoritedButton : {}
+                teacher.is_favorite ? styles.favoritedButton : {}
             ]}
           >
-            { teacher.favorited 
+            { teacher.is_favorite 
               ? <Image source={unfavoriteIcon} /> 
               : <Image source={heartOutlineIcon} /> 
             }
