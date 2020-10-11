@@ -57,8 +57,7 @@ export const TeachersProvider: React.FC = ({ children }) => {
   const [quantityFavorites, setQuantityFavorites] = useState(0);
 
   async function getFavorites(params: ParamsFavoritesProps) {
-    if (quantityFavorites > 0 && 
-      params.per_page * params.page >= quantityFavorites + params.per_page) {
+    if (params.per_page * params.page > quantityFavorites + params.per_page) {
       return;
     }
 
@@ -82,8 +81,7 @@ export const TeachersProvider: React.FC = ({ children }) => {
   }
 
   async function getTeachers(params: ParamsClassesProps) {
-    if (quantityTeachers > 0 && 
-      params.per_page * params.page >= quantityTeachers + params.per_page) {
+    if (params.per_page * params.page > quantityTeachers + params.per_page) {
       return;
     }
 
