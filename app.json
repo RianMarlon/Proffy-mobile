@@ -34,7 +34,7 @@
       "package": "com.rian.proffy",
       "versionCode": 1,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/favicon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#8257E5"
       }
     },
