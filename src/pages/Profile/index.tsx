@@ -15,7 +15,7 @@ import Textarea from '../../components/Textarea';
 import SelectPicker from '../../components/SelectPicker';
 import Success from '../../components/Success';
 
-import successBackground from '../../assets/images/success-background.png';
+import profileBackground from '../../assets/images/profile-background.png';
 import cameraIcon from '../../assets/images/icons/camera-icon.png';
 
 import styles from './styles';
@@ -86,7 +86,7 @@ function Profile() {
         const { user } = response.data;
 
         if (user.isTeacher) {
-          const cost = user.cost.toFixed(2).replace('.', ',');
+          const cost = parseFloat(user.cost).toFixed(2).replace('.', ',');
 
           updateForm({
             whatsapp: user.whatsapp,
@@ -298,8 +298,8 @@ function Profile() {
               />
               <View style={styles.headerContent}>
                 <ImageBackground 
-                  source={successBackground}
-                  resizeMode="repeat"
+                  source={profileBackground}
+                  resizeMode="contain"
                   style={styles.imageBackground}
                 >
                   <View style={styles.avatarContainer}>
