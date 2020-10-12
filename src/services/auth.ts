@@ -2,7 +2,7 @@ import api from './api';
 
 import AsyncStorage from '@react-native-community/async-storage';
 
-export const TOKEN_KEY = '@proffy/user';
+export const TOKEN_KEY = '@proffy:user';
 
 export const hasToken = async () => {
 
