@@ -258,6 +258,8 @@ function Register() {
                           onChangeText={(newValue) => updateField('email', newValue)}
                           labelError="E-mail não informado"
                           error={errors.email}
+                          keyboardType="email-address"
+                          autoCapitalize="none"
                           required={true}
                         />
 
@@ -267,6 +269,7 @@ function Register() {
                           onChangeText={(newValue) => updateField('password', newValue)}
                           labelError="Senha não informada"
                           error={errors.password}
+                          autoCapitalize="none"
                           required={true}
                         />
 

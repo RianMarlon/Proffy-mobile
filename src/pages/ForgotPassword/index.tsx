@@ -130,6 +130,10 @@ function ForgotPassword() {
                       onChangeText={(newValue) => updateField('email', newValue)}
                       labelError="E-mail não informado"
                       error={errors.email}
+                      keyboardType="email-address"
+                      autoCapitalize="none"
+                      returnKeyType="done"
+                      onSubmitEditing={handleSubmitForgotPassword}
                       required={true}
                     />
 

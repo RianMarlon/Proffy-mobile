@@ -36,6 +36,8 @@ function Login() {
     hasOneFieldEmpty, resetFields
   ] = useForm(initialFields);
 
+  const [focusPasswordInput, setFocusPasswordInput] = useState(false);
+
   const [rememberMe, setRememberMe] = useState(false);
   const [buttonSubmitDisabled, setButtonSubmitDisabled] = useState(true);
   const regexValidateEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
@@ -137,6 +139,8 @@ function Login() {
               onChangeText={(newValue) => updateField('email', newValue)}
               labelError="E-mail não informado"
               error={errors.email}
+              keyboardType="email-address"
+              autoCapitalize="none"
               required={true}
             />
 
@@ -146,6 +150,7 @@ function Login() {
               onChangeText={(newValue) => updateField('password', newValue)}   
               labelError="Senha não informada"
               error={errors.password}
+              autoCapitalize="none"
               required={true}
             />
 
