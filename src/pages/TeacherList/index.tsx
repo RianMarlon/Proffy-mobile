@@ -256,21 +256,30 @@ function TeacherList() {
         )}
       </PageHeader>
 
-      { teachers.length > 0 && (
-        <FlatList
-          style={styles.teacherList}
-          data={teachers}
-          renderItem={renderTeacherItem}
-          keyExtractor={(item) => {
-            return `${item.id_class}`;
-          }}
-          refreshing={refreshing}
-          onRefresh={handleOnRefresh}
-          onEndReached={loadTeachers}
-          onEndReachedThreshold={0.5}
-          ListFooterComponent = {renderLoading}
-        />
-      )}
+      { teachers.length > 0 ? (
+          <FlatList
+            style={styles.teacherList}
+            data={teachers}
+            renderItem={renderTeacherItem}
+            keyExtractor={(item) => {
+              return `${item.id_class}`;
+            }}
+            refreshing={refreshing}
+            onRefresh={handleOnRefresh}
+            onEndReached={loadTeachers}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent = {renderLoading}
+          />
+        ) : (
+          isFirstSearch && (
+            <View style={styles.noResults}>
+              <Text style={styles.noResultsText}>
+                Nenhum professor encontrado.
+              </Text>
+            </View>
+          )
+        )
+      }
     </View>
   );
 }
