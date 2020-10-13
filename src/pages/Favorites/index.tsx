@@ -34,6 +34,9 @@ function Favorites() {
   useEffect(() => {
     checkToken();
     loadTeachers()
+      .then(() => {
+        setIsFirstSearch(true);
+      })
       .catch(() => {
         setIsFirstSearch(true);
       });
@@ -103,21 +106,30 @@ function Favorites() {
         )}
       />
 
-      { favorites.length > 0 && (
-        <FlatList
-          style={styles.favorites}
-          data={favorites}
-          renderItem={renderFavoriteItem}
-          keyExtractor={(item) => {
-            return `${item.id_class}`;
-          }}
-          refreshing={refreshing}
-          onRefresh={handleOnRefresh}
-          onEndReached={loadTeachers}
-          onEndReachedThreshold={0.5}
-          ListFooterComponent = {renderLoading}
-        />
-      )}
+      { favorites.length > 0 ? (
+          <FlatList
+            style={styles.favorites}
+            data={favorites}
+            renderItem={renderFavoriteItem}
+            keyExtractor={(item) => {
+              return `${item.id_class}`;
+            }}
+            refreshing={refreshing}
+            onRefresh={handleOnRefresh}
+            onEndReached={loadTeachers}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent = {renderLoading}
+          />
+        ) : (
+          isFirstSearch && (
+            <View style={styles.noResults}>
+              <Text style={styles.noResultsText}>
+                Nenhum professor favoritado.
+              </Text>
+            </View>
+          )
+        )
+      }
     </View>
   );
 }
