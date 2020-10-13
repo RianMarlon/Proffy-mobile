@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Image, ScrollView, ImageBackground, Platform } from 'react-native';
 import { RectButton  } from 'react-native-gesture-handler';
 import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
 import Toast from 'react-native-root-toast';
 
 import api from '../../services/api';
@@ -69,18 +70,7 @@ function Profile() {
 
   useEffect(() => {
     checkToken();
-    
-    if (Platform.OS !== 'web') {
-      ImagePicker.requestCameraRollPermissionsAsync()
-        .then((response) => {
-          const { status } = response;
 
-          if (status !== 'granted') {
-            alert('Desculpe, mas precisamos da permissão da sua câmera!');
-          }
-        });
-    }
-    
     api.get('/me')
       .then(response => {
         const { user } = response.data;
@@ -184,6 +174,15 @@ function Profile() {
   }
 
   async function pickImage() {
+    if (Platform.OS !== 'web') {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+      if (status !== 'granted') {
+        alert('Desculpe, mas precisamos da permissão da sua galeria!');
+        return;
+      }
+    }
+
     const data = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -382,6 +381,7 @@ function Profile() {
                       maxLength={500}
                       multiline={true}
                       numberOfLines={10}
+                      autoCorrect={true}
                     />
                   </View>
                 </View>
