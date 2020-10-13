@@ -5,15 +5,12 @@ import Landing from '../pages/Landing';
 import Profile from '../pages/Profile';
 import StudyTabs from './StudyTabs';
 import GiveClasses from '../pages/GiveClasses';
-import AuthContext from '../contexts/AuthContext';
 
 const { Navigator, Screen } = createStackNavigator();
 
 function PrivateStack() {
-  const { isValidToken } = useContext(AuthContext);
-  
   return (
-    <Navigator screenOptions={{ headerShown: false }} initialRouteName={isValidToken ? "Landing" : "Login"}>
+    <Navigator screenOptions={{ headerShown: false }}>
       <Screen name="Landing" component={Landing} />
       <Screen name="MyProfile" component={Profile} />
       <Screen name="GiveClasses" component={GiveClasses} />

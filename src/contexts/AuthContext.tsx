@@ -1,5 +1,4 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { View, ActivityIndicator } from 'react-native';
 import { hasTokenValid } from '../services/auth';
 
 interface AuthContextData {

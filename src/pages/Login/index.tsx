@@ -36,8 +36,6 @@ function Login() {
     hasOneFieldEmpty, resetFields
   ] = useForm(initialFields);
 
-  const [focusPasswordInput, setFocusPasswordInput] = useState(false);
-
   const [rememberMe, setRememberMe] = useState(false);
   const [buttonSubmitDisabled, setButtonSubmitDisabled] = useState(true);
   const regexValidateEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;

@@ -1,5 +1,7 @@
 import React, { useContext } from 'react';
-import { ActivityIndicator, Platform, View } from 'react-native';
+import { ImageBackground } from 'react-native';
+
+import splashScreen from '../../assets/splash.png';
 
 import AuthContext from '../contexts/AuthContext';
 
@@ -11,16 +13,11 @@ function Stacks() {
 
   if (loading) {
     return (
-      <View style={{
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center' 
-      }}>
-        <ActivityIndicator 
-          size={Platform.OS == "android" ? 80 : "large"} 
-          color="#8257E5" 
-        />
-      </View>
+      <ImageBackground 
+        source={splashScreen}
+        style={{ flex: 1, backgroundColor: '#8257E5' }}
+        resizeMode="contain"
+      />
     );
   }
 
