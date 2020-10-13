@@ -102,6 +102,21 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: 20,
   },
+
+  noResults: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  noResultsText: {
+    width: '90%',
+    fontFamily: 'Poppins_400Regular',
+    fontSize: 16,
+    lineHeight: 24,
+    textAlign: 'center',
+    color: '#9C98A6',
+  },
 });
 
 export default styles;
