@@ -5,6 +5,7 @@ import { hasTokenValid } from '../services/auth';
 interface AuthContextData {
   isValidToken: boolean,
   checkToken(): Promise<void>,
+  loading: boolean,
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -20,25 +21,13 @@ export const AuthProvider: React.FC = ({ children }) => {
   async function checkToken() {
     const response = await hasTokenValid();
     
-    setLoading(false);
     setIsValidToken(response);
-  }
-
-  if (loading) {
-    return (
-      <View style={{
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center' 
-      }}>
-        <ActivityIndicator size={80} color="#8257E5" />
-      </View>
-    );
+    setLoading(false);
   }
 
   return (
     <AuthContext.Provider 
-      value={{isValidToken, checkToken}}
+      value={{isValidToken, checkToken, loading}}
     >
       {children}
     </AuthContext.Provider>
