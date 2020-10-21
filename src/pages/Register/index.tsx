@@ -9,7 +9,7 @@ import useForm from '../../hooks/useForm';
 
 import Success from '../../components/Success';
 import InputLabel from '../../components/InputLabel';
-import InputPasword from '../../components/InputPassword';
+import InputPassword from '../../components/InputPassword';
 
 import backGreyIcon from '../../assets/images/icons/back-grey.png';
 
@@ -263,7 +263,7 @@ function Register() {
                           required={true}
                         />
 
-                        <InputPasword
+                        <InputPassword
                           label="Senha"
                           value={form.password}
                           onChangeText={(newValue) => updateField('password', newValue)}
@@ -273,7 +273,7 @@ function Register() {
                           required={true}
                         />
 
-                        <InputPasword
+                        <InputPassword
                           label="Confirmar senha"
                           value={form.confirmPassword}
                           onChangeText={(newValue) => updateField('confirmPassword', newValue)}

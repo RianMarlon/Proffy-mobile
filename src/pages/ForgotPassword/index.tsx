@@ -149,7 +149,7 @@ function ForgotPassword() {
                             styles.buttonForgotPasswordText, 
                             styles.buttonForgotPasswordTextDisabled
                           ]}>
-                            Entrar
+                            Enviar
                           </Text>
                         </TouchableOpacity>
                       ) : (

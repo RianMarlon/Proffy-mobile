@@ -14,7 +14,7 @@ import useForm from '../../hooks/useForm';
 
 import Proffy from '../../components/Proffy';
 import InputLabel from '../../components/InputLabel';
-import InputPasword from '../../components/InputPassword';
+import InputPassword from '../../components/InputPassword';
 
 import checkIcon from '../../assets/images/icons/check.png';
 
@@ -142,7 +142,7 @@ function Login() {
               required={true}
             />
 
-            <InputPasword
+            <InputPassword
               label="Senha"
               value={form.password}
               onChangeText={(newValue) => updateField('password', newValue)}   

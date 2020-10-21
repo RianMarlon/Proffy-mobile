@@ -18,7 +18,7 @@ interface InputPasswordProps extends TextInputProps {
   required?: boolean,
 }
 
-const InputPasword: React.FC<InputPasswordProps> = ({
+const InputPassword: React.FC<InputPasswordProps> = ({
     label, labelError, error, value, onChangeText, required 
   }) => {
 
@@ -60,4 +60,4 @@ const InputPasword: React.FC<InputPasswordProps> = ({
   );
 }
 
-export default InputPasword;
+export default InputPassword;

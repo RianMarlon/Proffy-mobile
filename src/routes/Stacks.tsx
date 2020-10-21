@@ -16,7 +16,7 @@ function Stacks() {
       <ImageBackground 
         source={splashScreen}
         style={{ flex: 1, backgroundColor: '#8257E5' }}
-        resizeMode="contain"
+        resizeMode="cover"
       />
     );
   }

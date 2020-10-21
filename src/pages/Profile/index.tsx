@@ -215,13 +215,13 @@ function Profile() {
     const fd = new FormData();
     
     if (avatar.uri) {
-      fd.append('avatar', avatar);
+      fd.append('avatar', { ...avatar } as any);
 
       api.put('/me', fd, {
           onUploadProgress: (progressEvent) => {
             console.log('Progress event: ' + Math.round(progressEvent.loaded / progressEvent.total * 100) + '%');
           }
-        })  
+        })
         .then(() => {
           const messageSuccess = 'Imagem alterada com sucesso!';
           setToastMessage(messageSuccess);
